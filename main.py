@@ -125,7 +125,7 @@ def draw(canvas):
 
     max_row_num, max_column_num = canvas.getmaxyx()
     coroutines = []
-    coroutines += generate_stars(canvas, number_of_stars=100)
+    coroutines += generate_stars(canvas, number_of_stars=settings.NUMBER_OF_STARS)
     frames = (
         load_frame('frames/rocket_frame_1.txt'),
         load_frame('frames/rocket_frame_2.txt'),
