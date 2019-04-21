@@ -108,7 +108,9 @@ async def animate_spaceship(canvas, row, column, frames):
         draw_frame(canvas, row, column, frame)
         await asyncio.sleep(0)
         draw_frame(canvas, row, column, frame, negative=True)
+
         row_shift, column_shift, space_pressed = read_controls(canvas)
+        # checking for collisions with screen borders
         frame_rows, frame_columns = get_frame_size(frame)
         if 0 < row + row_shift < max_row_num - frame_rows:
             row += row_shift
