@@ -3,6 +3,7 @@ import curses
 import itertools
 import random
 import time
+
 import settings
 from curses_tools import draw_frame, get_frame_size, read_controls
 
@@ -38,39 +39,6 @@ async def blink(canvas, row, column, symbol='*'):
             await asyncio.sleep(0)
 
 
-def generate_stars(canvas, number_of_stars):
-    """
-    Generate coroutines of stars.
-
-    Each stars has unique coordinates.
-
-    :param canvas: window object from curses
-    :param number_of_stars: number of stars
-    :return: list with coroutines
-    """
-    max_row, max_column = canvas.getmaxyx()
-    stars = []
-    maximum_stars = (max_row - 2) * (max_column - 2)  # 2 for borders
-    if number_of_stars > maximum_stars:
-        number_of_stars = maximum_stars
-    used_coordinates = []
-    while len(stars) < number_of_stars:
-        column = random.randint(1, max_column - 2)
-        row = random.randint(1, max_row - 2)
-        if (row, column) in used_coordinates:
-            continue
-        star_type = random.choice('+*.:')
-        stars.append(blink(canvas, row, column, star_type))
-        used_coordinates.append((row, column))
-    return stars
-
-
-def load_frame(filepath):
-    """Load animation frame from the file."""
-    with open(filepath, mode='r', encoding='utf-8') as f:
-        return f.read()
-
-
 async def fire(canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0):
     """Display animation of gun shot. Direction and speed can be specified."""
 
@@ -99,6 +67,39 @@ async def fire(canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0
         canvas.addstr(round(row), round(column), ' ')
         row += rows_speed
         column += columns_speed
+
+
+def generate_stars(canvas, number_of_stars):
+    """
+    Generate array of stars.
+
+    Each stars has unique coordinates.
+
+    :param canvas: window object from curses
+    :param number_of_stars: number of stars
+    :return: list with coroutines
+    """
+    max_row_num, max_column_num = canvas.getmaxyx()
+    stars = []
+    maximum_stars = (max_row_num - 2) * (max_column_num - 2)  # 2 for borders
+    if number_of_stars > maximum_stars:
+        number_of_stars = maximum_stars
+    used_coordinates = []
+    while len(stars) < number_of_stars:
+        column = random.randint(1, max_column_num - 2)
+        row = random.randint(1, max_row_num - 2)
+        if (row, column) in used_coordinates:
+            continue
+        star_type = random.choice('+*.:')
+        stars.append(blink(canvas, row, column, star_type))
+        used_coordinates.append((row, column))
+    return stars
+
+
+def load_frame(filepath):
+    """Load animation frame from the file."""
+    with open(filepath, mode='r', encoding='utf-8') as f:
+        return f.read()
 
 
 async def animate_spaceship(canvas, row, column, frames):
