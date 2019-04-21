@@ -7,4 +7,4 @@ Settings and constants.
 TIC_TIMEOUT = 0.1
 
 # Number of stars on screen.
-NUMBER_OF_STARS=100
+NUMBER_OF_STARS = 100
