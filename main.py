@@ -123,14 +123,14 @@ def draw(canvas):
     canvas.nodelay(True)   # getch() will be non-blocking
     curses.curs_set(False)  # hide cursor
 
-    max_row, max_column = canvas.getmaxyx()
+    max_row_num, max_column_num = canvas.getmaxyx()
     coroutines = []
     coroutines += generate_stars(canvas, number_of_stars=100)
     frames = (
         load_frame('frames/rocket_frame_1.txt'),
         load_frame('frames/rocket_frame_2.txt'),
     )
-    spaceship = animate_spaceship(canvas, max_row//2, max_column//2, frames)
+    spaceship = animate_spaceship(canvas, max_row_num//2, max_column_num//2, frames)
     coroutines.append(spaceship)
     while True:
         for coroutine in coroutines.copy():
