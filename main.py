@@ -73,21 +73,25 @@ def generate_stars(canvas, number_of_stars):
     """
     Generate array of stars.
 
-    Each stars has unique coordinates.
+    Each stars has unique coordinates. The more stars - the more CPU load.
+    And with animated star as every symbol on screen it's too much.
+    What's why maximum number of stars is limited to 50% of screen space.
 
     :param canvas: window object from curses
     :param number_of_stars: number of stars
     :return: list with coroutines
     """
     max_row_num, max_column_num = canvas.getmaxyx()
+    max_row_num -= 2  # 2 for borders
+    max_column_num -= 2
     stars = []
-    maximum_stars = (max_row_num - 2) * (max_column_num - 2)  # 2 for borders
+    maximum_stars = (max_row_num * max_column_num) // 2
     if number_of_stars > maximum_stars:
         number_of_stars = maximum_stars
     used_coordinates = []
     while len(stars) < number_of_stars:
-        column = random.randint(1, max_column_num - 2)
-        row = random.randint(1, max_row_num - 2)
+        column = random.randint(1, max_column_num)
+        row = random.randint(1, max_row_num)
         if (row, column) in used_coordinates:
             continue
         star_type = random.choice('+*.:')
