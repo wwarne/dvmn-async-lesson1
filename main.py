@@ -8,7 +8,7 @@ import settings
 from curses_tools import draw_frame, get_frame_size, read_controls
 
 
-async def blink(canvas, row, column, symbol='*'):
+async def blink(canvas, row, column, symbol='*', offset_tics=0):
     """
     Draw animated symbol by provided coordinates.
 
@@ -16,10 +16,10 @@ async def blink(canvas, row, column, symbol='*'):
     :param row: number of row
     :param column: number of column
     :param symbol: symbol to draw
+    :param offset_tics: delay before starting animation so it won't start at the same time as others
     :return: coroutine for animate symbol at row x column
     """
-    for _ in range(random.randint(0, 30)):
-        # random delay so all animations on screen won't start at the same time
+    for _ in range(offset_tics):
         await asyncio.sleep(0)
     while True:
         canvas.addstr(row, column, symbol, curses.A_DIM)
@@ -91,7 +91,8 @@ def generate_stars(canvas, number_of_stars):
         if (row, column) in used_coordinates:
             continue
         star_type = random.choice('+*.:')
-        stars.append(blink(canvas, row, column, star_type))
+        time_offset = random.randint(0, 30)
+        stars.append(blink(canvas, row, column, star_type, time_offset))
         used_coordinates.append((row, column))
     return stars
 
